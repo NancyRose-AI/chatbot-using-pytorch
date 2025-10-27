@@ -1,0 +1,43 @@
+import numpy as np
+import nltk
+
+from nltk.stem.porter import PorterStemmer
+
+
+stemmer = PorterStemmer()
+
+def tokenize(sentence):
+    """
+    Split sentence into an array of words/tokens.
+    Example: "How are you?" -> ["How", "are", "you", "?"]
+    """
+    return nltk.word_tokenize(sentence)
+
+def stem(word):
+    """
+    Convert word to its root form (stemming).
+    Example: "organizing" -> "organ"
+    """
+    return stemmer.stem(word.lower())
+
+def bag_of_words(tokenized_sentence, words):
+    """
+    Create a bag-of-words vector:
+    1 for each known word that exists in the sentence, 0 otherwise.
+
+    Example:
+    sentence = ["hello", "how", "are", "you"]
+    words = ["hi", "hello", "I", "you", "bye", "thank", "cool"]
+    Result = [0, 1, 0, 1, 0, 0, 0]
+    """
+    
+    sentence_words = [stem(word) for word in tokenized_sentence]
+   
+    bag = np.zeros(len(words), dtype=np.float32)
+    
+   
+    for idx, w in enumerate(words):
+        if w in sentence_words:
+            bag[idx] = 1.0
+
+    return bag
